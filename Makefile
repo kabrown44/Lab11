@@ -1,8 +1,8 @@
 AutomatedMakefile = am
 CC = g++
 
-FILES = 
-EXECUTABLE = 
+FILES = BSTDriver.o
+EXECUTABLE = BSTDriver.exe
 
 PROJECT_PATH = $(PROJECT_DIR)
 GTK_PATH = /$(DRIVE_LETTER)/MinGW/GTK
@@ -23,3 +23,5 @@ Lab11: 		$(FILES)
 	
 
 
+BSTDriver.o:	BinarySearchTree.h BSTDriver.cpp
+		$(COMPILE) BSTDriver.cpp

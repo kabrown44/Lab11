@@ -61,18 +61,40 @@ template < class T >
 void BinarySearchTree<T>::remove(String* sk)
 {
    //DO THIS
-
-
-
+   root = removeItem(root, sk);
 }
 
 template < class T >
 TreeNode<T>* BinarySearchTree<T>::removeItem(TreeNode<T>* tNode, String* sk)
 {
    //DO THIS
+   if (tNode == NULL)
+   {
+      return tNode;
+   }
 
+   T* item = tNode->getItem();
+   int comp = (*compare_keys) (sk, item);
 
+   if (comp == 0)
+   {
+      sze--;
+      return removeNode(tNode);
+   }
 
+   else if (comp > 0)
+   {
+      TreeNode<T>* subtree = removeItem(tNode->getRight(), sk);
+      tNode->setRight(subtree);
+      return tNode;
+   }
+
+   else
+   {
+      TreeNode<T>* subtree = removeItem(tNode->getLeft(), sk);
+      tNode->setLeft(subtree);
+      return tNode;
+   }
 }
 
 template < class T >
@@ -98,11 +120,11 @@ TreeNode<T>* BinarySearchTree<T>::removeNode(TreeNode<T>* tNode)
    else 
    {
       //DO THIS
-
-
-
-
-
+      T* temp = findLeftMost(tNode->getRight());
+      tNode->setItem(temp);
+      TreeNode<T>* subtree = removeLeftMost(tNode->getRight());
+      tNode->setRight(subtree);
+      return tNode;
    }
 }
 
@@ -110,40 +132,70 @@ template < class T >
 T* BinarySearchTree<T>::findLeftMost(TreeNode<T>* tNode)
 {
    //DO THIS (use a while loop)
-
-
-
-
-
+   while (tNode->getLeft() != NULL)
+   {
+      tNode = tNode->getLeft();
+   }
+   return tNode->getItem();
 }
 
 template < class T >
 TreeNode<T>* BinarySearchTree<T>::removeLeftMost(TreeNode<T>* tNode)
 {
    //DO THIS (recursion)
+   TreeNode<T>* subtree;
+   if (tNode->getLeft() == NULL)
+   {
+      TreeNode<T>* right = tNode->getRight();
+      delete tNode;
+      return right;
+   }
 
+   else
+   {
+      subtree = removeLeftMost(tNode->getLeft());
+   }
 
-
-
-
+   tNode->setLeft(subtree);
+   return tNode;
 }
 
 template < class T >
 T** BinarySearchTree<T>::toArray()
 {
    //DO THIS
+   int count = 0;
 
+   T** array = new T*[sze];
 
+   BinaryTreeIterator<T>* iter = iterator();
+   iter->setInorder();
 
+   while (iter->hasNext() && count < sze)
+   {
+      array[count] = iter->next();
+      count++;
+   }
+
+   return array;
 }
 
 template < class T >
-T** BinarySearchTree<T>::treeSort(T** items, int num_itemss, int (*comp_items) (T* item_1, T* item_2), int (*comp_keys) (String* key, T* item))
+T** BinarySearchTree<T>::treeSort(T** items, int num_items, int (*comp_items) (T* item_1, T* item_2), int (*comp_keys) (String* key, T* item))
 {
    //DO THIS
+   T** sorted;
 
+   BinarySearchTree<T>* BST = new BinarySearchTree((*comp_items), (*comp_keys));
 
+   for (int i = 0; i < num_items; i++)
+   {
+      BST->insert(items[i]);
+   }
 
+   sorted = BST->toArray();
+
+   return sorted;
 }
 
 template < class T >
